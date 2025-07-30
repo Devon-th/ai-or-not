@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI or Not?</title>
+    <title>(Fake) News</title>
+    <link rel="stylesheet" href="static/styles.css" type="text/css">
 </head>
 <body>
-    
+    <h1>(Fake) News</h1><br>
+    <h2>Real or not?</h2>
+    <h2>Can you use your judgment tell the difference within 10 seconds?</h2>
+    <form action="{{url_for('game_play')}}">
+        <button type="submit">Play</button>
+    </form>
+    <div>
+        <h1>Examples</h1>
+        <img src="static/examples/ai-colorful-cave.png">
+        <img src="static/examples/">
+    </div>
 </body>
 </html>
