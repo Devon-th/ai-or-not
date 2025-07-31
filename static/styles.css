@@ -1,3 +1,10 @@
 h1, h2, h3, p, form {
     text-align: center;
 }
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}

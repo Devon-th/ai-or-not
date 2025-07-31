@@ -8,6 +8,11 @@
 </head>
 <body>
     <h1>The Game</h1>
-    <img src="{{image}}">
+    <img src={{image}}><br>
+    <p>Headline: {{headline}}</p>
+    <form action="check_answer" method="post">
+        <button type="submit" name="action" value="ai">This is AI</button>
+        <button type="submit" name="action" value="real">This is Real</button>
+    </form>
 </body>
 </html>
