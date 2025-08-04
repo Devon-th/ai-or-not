@@ -46,8 +46,8 @@ lives = 3
 
 """
 
-- Get random number
-- Use that as index for images, headlines, is_real
+- Get random number /
+- Use that as index for images, headlines, is_real /
 - Display to site
 - Allow player to click button
 - Check answer: Correct -> score+=1, incorrect -> lives-=1
