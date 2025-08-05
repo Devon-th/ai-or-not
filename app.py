@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session
 import random
 
 app = Flask(__name__)
+app.secret_key = "SHAFSDFHW"
 
 images = [
     'static/ai/plane.png',
@@ -29,7 +30,7 @@ headlines = [
     'A worm has been revived after 46,000 years in the Siberian permafrost',
 ]
 
-is_real = [
+image_is_real = [
     False,
     False,
     False,
@@ -64,22 +65,44 @@ def index():
 def get_images(): #returns image_data which contains [path, headline, boolean]
         image_data = [] #[path, headline, boolean]
         randindex = random.randint(0, len(images) - 1)
-        image_data.extend([images[randindex], headlines[randindex], is_real[randindex]])
+        image_data.extend([images[randindex], headlines[randindex], image_is_real[randindex]])
         return image_data
 
-#@app.route('/check-answer')
-#def check_answer():
-#    user_answer = request.form.get('action')
-#    if user_answer == 'ai' and #something here:
+@app.route('/check-answer', methods=['POST'])
+def check_answer(is_real):
+    #return render_template("index.html")
+    user_answer = request.form.get('action')
+    if request.method == 'POST':
+        if (user_answer == "ai" and is_real == False) or (user_answer == "real" and is_real == True):
+            score += 1
+            return "YAY" + str(user_answer) + str(is_real) #apparently is_real is an entire list
+        else:
+            score -= 1
+            return "OOPS" + str(user_answer) + str(is_real)
+    else:
+        return "ERROR"
+
+
+"""
+
+TODO:
+
+- Make is_real that is used in check_answer one single element from the list that corresponds to the image used
+
+""" 
 
 @app.route('/play')
-def game_play():
-    while lives > 0:
-        image_data = get_images()
-        image_path = image_data[0]
-        headline = image_data[1]
-        is_real = image_data[2]
-        return render_template('game_page.html', image=image_path, headline=headline)
+def start_game():
+    session['score'] = 0
+    session['question'] = 0
+    return redirect(url_for('play_round'))
+
+def play_round():
+    question_number = session.get('question', 0) # default is 0 if there is none
+    image_data = get_images()
+    session['image_path'] = image_data[0]
+    session['headline'] = image_data[1]
+    return render_template('game_page.html', image=session[image_path], headline=session['headline'])
 
 if __name__ == '__main__':
     app.run(debug=True)
