@@ -28,12 +28,25 @@ img, .big-button, .decision-button {
 }
 
 img {
+    border: 2px solid;
+}
+
+img {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 img:hover, .big-button:hover, .decision-button:hover {
     transform: scale(1.1);
+}
+
+.hover-text {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.hover-wrapper:hover .hover-text {
+    opacity: 1;
 }
 
 .image-container {
@@ -54,4 +67,9 @@ body {
 
 .red {
     color: red;
+}
+
+p.limited-width {
+    max-width: 600px;
+    margin: 0 auto;
 }

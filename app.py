@@ -110,9 +110,9 @@ def play_round():
     game_finished = question_number > len(images) - 1
     print(f"game_finished: {game_finished}")
     if game_finished:
-        return render_template('finish.html', finishing_message = "Congratulations! You've finished the game!", score = score, lives = lives)
+        return render_template('finish.html', finishing_message = "Congratulations! You've finished the game!", score = score, lives = lives, question_amount = len(images))
     elif lives == 0:
-        return render_template('finish.html', finishing_message = "Game Over!", score = score, lives = lives)
+        return render_template('finish.html', finishing_message = "Game Over!", score = score, lives = lives, question_amount = len(images))
     
     else:
         image_data = get_images()
