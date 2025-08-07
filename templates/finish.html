@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ finishing_message }}</title>
+    <link rel="stylesheet" href="static/styles.css" type="text/css">
 </head>
 <body>
-    <h1>{{ finishing_message }}</h1>
+    <h1 class="title">{{ finishing_message }}</h1>
     <h2>Score: {{ score }}</h2>
-    <h2>Lives Left: {{ lives }}</h2>    
+    <h2>Lives Left: {{ lives }}/3</h2>    
+    <form action="{{ url_for('index')}}">
+        <button class="decision-button" type="submit">Go Home</button>
+    </form>
+    <form action="{{ url_for('start_game')}}">
+        <button class="decision-button" type="submit">Play Again</button>
+    </form>
 </body>
 </html>

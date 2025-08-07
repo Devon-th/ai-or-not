@@ -1,10 +1,57 @@
 h1, h2, h3, p, form, img {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
+    color:white;
+}
+
+button {
+    border-radius: 10px;
+}
+
+.big-button {
+    font-size: 30px;
+    width: 125px;
+    height: 60px;
+    font-weight: 600;
+}
+
+.decision-button {
+    font-size: 20px;
+    width: 140px;
+    height: 40px;
+    font-weight: 700;
+}
+
+img, .big-button, .decision-button {
+    border-radius: 15px;
+    transition: transform 0.25s;
+}
+
+img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+img:hover, .big-button:hover, .decision-button:hover {
+    transform: scale(1.1);
 }
 
 .image-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 20px;
+}
+
+#game-layout {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+body {
+    background-color: rgb(20, 20, 20);
+}
+
+.red {
+    color: red;
 }
