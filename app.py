@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 import random
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ headlines = [
     'A worm has been revived after 46,000 years in the Siberian permafrost',
 ]
 
-image_is_real = [
+is_real = [
     False,
     False,
     False,
@@ -43,8 +43,6 @@ image_is_real = [
     True,
 ]
 
-lives = 3
-
 """
 
 - Get random number /
@@ -56,6 +54,9 @@ lives = 3
 """
 
 def game_reset():
+    session['lives'] = 3
+    session['score'] = 0
+    session['question'] = 0
     lives = 3
 
 @app.route('/')
@@ -64,45 +65,59 @@ def index():
 
 def get_images(): #returns image_data which contains [path, headline, boolean]
         image_data = [] #[path, headline, boolean]
-        randindex = random.randint(0, len(images) - 1)
-        image_data.extend([images[randindex], headlines[randindex], image_is_real[randindex]])
-        return image_data
+        randIndex = random.randint(0, len(images) - 1)
+        image_data.extend([images[randIndex], headlines[randIndex], is_real[randIndex], randIndex])
+        return {
+            'path': images[randIndex],
+            'headline': headlines[randIndex],
+            'reality': is_real[randIndex],
+            'index': randIndex,
+        }
 
 @app.route('/check-answer', methods=['POST'])
-def check_answer(is_real):
-    #return render_template("index.html")
+def check_answer():
+    question_number = session.get('question')
+    score = session.get('score')
+    lives = session.get('lives')
     user_answer = request.form.get('action')
+    print(user_answer)
+    image_data = session.get('image_data')
+    reality = image_data['reality']
     if request.method == 'POST':
-        if (user_answer == "ai" and is_real == False) or (user_answer == "real" and is_real == True):
+        if (user_answer == "ai" and reality == False) or (user_answer == "real" and reality == True):
             score += 1
-            return "YAY" + str(user_answer) + str(is_real) #apparently is_real is an entire list
         else:
-            score -= 1
-            return "OOPS" + str(user_answer) + str(is_real)
+            lives -= 1
+        question_number += 1
+        session['question'] = question_number
+        session['score'] = score
+        return redirect(url_for('play_round'))
     else:
         return "ERROR"
 
-
-"""
-
-TODO:
-
-- Make is_real that is used in check_answer one single element from the list that corresponds to the image used
-
-""" 
-
 @app.route('/play')
 def start_game():
+    session['lives'] = 3
     session['score'] = 0
     session['question'] = 0
     return redirect(url_for('play_round'))
 
+@app.route('/play-round')
 def play_round():
     question_number = session.get('question', 0) # default is 0 if there is none
-    image_data = get_images()
-    session['image_path'] = image_data[0]
-    session['headline'] = image_data[1]
-    return render_template('game_page.html', image=session[image_path], headline=session['headline'])
+    score = session.get('score')
+    lives = session.get('lives')
+    game_finished = question_number > len(images) - 1
+    print(f"game_finished: {game_finished}")
+    if game_finished:
+        return render_template('finish.html', finishing_message = "Congratulations! You've finished the game!", score = score, lives = lives)
+    elif lives == 0:
+        return render_template('finish.html', finishing_message = "Game Over!", score = score, lives = lives)
+    
+    else:
+        image_data = get_images()
+        session['image_data'] = image_data
+        return render_template('game_page.html', image = image_data['path'], headline = image_data['headline']) # maybe this can go to another route called 'results'
 
 if __name__ == '__main__':
     app.run(debug=True)
